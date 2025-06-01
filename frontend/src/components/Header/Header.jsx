@@ -2,8 +2,10 @@ import React from "react";
 import { BsStars } from "react-icons/bs";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAppContext } from "../../context/AppContext"
 
 const Header = () => {
+  const { input, setInput } = useAppContext();
   const handleConfetti = () => {
     confetti({
       particleCount: 150,
@@ -41,6 +43,8 @@ const Header = () => {
       <div className="relative mt-6 w-full max-w-md mx-auto">
         <input
           type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           placeholder="Search for blogs"
           className="w-full pr-28 pl-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400 placeholder-gray-400"
         />

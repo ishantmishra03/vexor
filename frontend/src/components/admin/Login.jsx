@@ -1,11 +1,27 @@
 import { useState } from "react";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const { axios, setToken } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const { data } = await axios.post("/api/admin/login", { email, password });
+      if (data.success) {
+        setToken(data.token);
+        localStorage.setItem("token", data.token);
+        axios.defaults.headers.common["Authorization"] = data.token;
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -18,7 +34,10 @@ const Login = () => {
           Admin Login
         </h2>
 
-        <label htmlFor="email" className="block mb-2 font-semibold text-[#0c193e]">
+        <label
+          htmlFor="email"
+          className="block mb-2 font-semibold text-[#0c193e]"
+        >
           Email
         </label>
         <input
@@ -31,7 +50,10 @@ const Login = () => {
           className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#9a36ff]"
         />
 
-        <label htmlFor="password" className="block mb-2 font-semibold text-[#0c193e]">
+        <label
+          htmlFor="password"
+          className="block mb-2 font-semibold text-[#0c193e]"
+        >
           Password
         </label>
         <input
