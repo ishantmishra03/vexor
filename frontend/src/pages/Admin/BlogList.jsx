@@ -1,13 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
-import { blogs } from "../../data/blogs";
 import Table from "../../components/Table/Table";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const BlogList = () => {
-  const [blogs1, setBlogs1] = useState([]);
+  const { axios } = useAppContext();
+  const [blogs, setBlogs] = useState([]);
 
+  //Fetch Blogs
   const fetchBlogs = useCallback(async () => {
-    setBlogs1(blogs);
-  }, []);
+    try {
+      const { data } = await axios.get("/api/admin/blogs");
+      if (data.success) {
+        setBlogs(data.blogs);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }, [axios]);
+
 
   useEffect(() => {
     fetchBlogs();
@@ -38,14 +51,14 @@ const BlogList = () => {
             </tr>
           </thead>
           <tbody>
-            {blogs1.length === 0 ? (
+            {blogs.length === 0 ? (
               <tr>
                 <td colSpan="5" className="text-center py-8 text-indigo-400">
                   No blogs available
                 </td>
               </tr>
             ) : (
-              blogs1.map((blog, index) => (
+              blogs.map((blog, index) => (
                 <Table
                   blog={blog}
                   index={index + 1}

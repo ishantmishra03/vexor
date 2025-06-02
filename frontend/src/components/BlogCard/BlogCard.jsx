@@ -20,7 +20,7 @@ const BlogCard = ({ blog }) => {
             <p
               className="mt-4 text-gray-600 text-sm line-clamp-3 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: blog.description }}
-            ></p>
+            />
           </div>
         </div>
       </Link>

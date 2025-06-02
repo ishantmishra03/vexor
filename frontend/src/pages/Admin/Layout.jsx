@@ -1,11 +1,13 @@
 import { Outlet,useNavigate } from "react-router-dom";
 import Sidebar from "../../components/admin/Sidebar";
+import { useAppContext } from "../../context/AppContext"
 
 const Layout = () => {
-  const navigate = useNavigate();
+  const {navigate , setToken} = useAppContext();
 
   const logout = () => {
-    navigate("/");
+    localStorage.removeItem("token");
+    setToken(null);
   };
 
   return (

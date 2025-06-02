@@ -61,7 +61,7 @@ const AddBlog = () => {
 
       const blog = {
         title,
-        description: quillRef.current.root.innerHTML,
+        description,
         content,
         category,
         isPublished,
@@ -95,7 +95,7 @@ const AddBlog = () => {
 
   const generateContent = (e) => {
     e.preventDefault();
-    console.log("AI content generation triggered");
+    
   };
 
   return (

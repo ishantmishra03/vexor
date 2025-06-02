@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FiFileText, FiMessageCircle, FiFile } from "react-icons/fi";
 import Table from "../../components/Table/Table";
-import { dashboard_data } from "../../data/blogs";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 export default function BlogDashboard() {
+  const {axios} = useAppContext();
   const [dashboardData, setDashboardData] = useState({
     blogs: 0,
     comments: 0,
@@ -12,8 +14,13 @@ export default function BlogDashboard() {
   });
 
   const fetchData = useCallback(async () => {
-    setDashboardData(dashboard_data);
-  }, []);
+   try {
+    const {data} = await axios.get('/api/admin/dashboard');
+    data.success ? setDashboardData(data.dashboardData) : toast.error(data.message);
+   } catch (error) {
+      toast.error(error.message)
+   }
+  }, [axios]);
 
   useEffect(() => {
     fetchData();
