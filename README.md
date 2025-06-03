@@ -85,8 +85,8 @@ ADMIN_PASSWORD=" "
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/mern-blog-app.git
-cd mern-blog-app
+git clone https://github.com/ishantmishra03/vexor.git
+cd vexor
 ```
 
 ### 2. Install dependencies
