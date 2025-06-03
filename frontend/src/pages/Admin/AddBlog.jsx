@@ -3,9 +3,11 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { useAppContext } from "../../context/AppContext";
 import { toast } from "react-hot-toast";
+import {parse} from "marked";
 
 const AddBlog = () => {
   const { axios } = useAppContext();
+  const [loading, setLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -52,6 +54,24 @@ const AddBlog = () => {
     }));
   };
 
+  const generateContent = async () => {
+    try {
+      setLoading(true);
+      const { title } = formData
+      const {data} = await axios.post('/api/blog/generate', {prompt: title});
+      console.log(data);
+      if(data.success){
+        quillRef.current.root.innerHTML = parse(data.content);
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    } finally{
+      setLoading(false);
+    }
+  }
+
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -93,10 +113,7 @@ const AddBlog = () => {
     }
   };
 
-  const generateContent = (e) => {
-    e.preventDefault();
-    
-  };
+
 
   return (
     <div className="min-h-screen  py-10 px-4 mx-auto mt-10 ">
@@ -173,10 +190,11 @@ const AddBlog = () => {
             />
             <button
               onClick={generateContent}
+              disabled={loading}
               type="button"
               className="mt-2 text-sm text-[#9a36ff] underline hover:text-[#b469ff]"
             >
-              Generate with AI
+              {loading ? "Generating..." : "Generate with AI"}
             </button>
           </div>
 
